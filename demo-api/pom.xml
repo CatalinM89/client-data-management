@@ -39,9 +39,19 @@
             </goals>
             <configuration>
               <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
-              <library>resttemplate</library>
-              <generatorName>java</generatorName>
+              <generatorName>spring</generatorName>
+              <modelPackage>com.example.demo.models</modelPackage>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <generateApis>false</generateApis>
+              <generateSupportingFiles>false</generateSupportingFiles>
+              <generateApiDocumentation>false</generateApiDocumentation>
               <configOptions>
+<!--                <additionalModelTypeAnnotations>-->
+<!--                  @lombok.Builder-->
+<!--                  @lombok.NoArgsConstructor-->
+<!--                  @lombok.AllArgsConstructor-->
+<!--                </additionalModelTypeAnnotations>-->
                 <useJakartaEe>true</useJakartaEe>
                 <sourceFolder>src/gen/java/main</sourceFolder>
               </configOptions>
