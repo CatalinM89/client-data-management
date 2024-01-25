@@ -10,6 +10,66 @@ servers:
     description: Optional server description, e.g. Internal staging server for testing
 paths:
   /customer:
+    post:
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request if any of the mandatory data points are missing.
+    get:
+      summary: Returns a specific customer by it's unique id.
+      description:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The user id to retrieve the data for
+      responses:
+        '200': # status code
+          description: Returns the customer if found in the service repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          description: The customer id is not known to the system
+  /customer/find:
+    get:
+      summary: Returns filtered list by first_name or last_name (or both).
+      description:
+      parameters:
+        - in: query
+          name: first_name
+          required: false
+          schema:
+            type: string
+            description: The first name of the customer(s) we want to retrieve
+        - in: query
+          name: last_name
+          required: false
+          schema:
+            type: string
+            description: The last name of the customer(s) we want to retrieve
+      responses:
+        '200': # status code
+          description: Returns the customers if found in the service repository
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponse'
+
+  /customers:
     get:
       summary: Returns a list of customers.
       description:
@@ -21,4 +81,73 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/CustomerResponse'
+
+
+
+components:
+  schemas:
+    CustomerRequest:
+      properties:
+        first_name:
+          type: string
+          description: Identifies a person, potentially with a middle name as well, and differentiates that person from the other members of a group
+        last_name:
+          type: string
+          description: The mostly hereditary portion of one's personal name that indicates one's family.
+        age:
+          type: integer
+          minimum: 18
+          maximum: 200
+          description: Our bank customers need to be considered legal adults.
+        email:
+          type: string
+        current_living_address:
+          $ref: '#/components/schemas/CustomerAddress'
+      required:
+        - first_name
+        - last_name
+        - age
+    CustomerResponse:
+      properties:
+        id:
+          type: string
+          description: Unique id generated for the customer.
+        first_name:
+          type: string
+          description: Identifies a person, potentially with a middle name as well, and differentiates that person from the other members of a group
+        last_name:
+          type: string
+          description: The mostly hereditary portion of one's personal name that indicates one's family.
+        age:
+          type: integer
+          minimum: 18
+          maximum: 200
+          description: Our bank customers need to be considered legal adults.
+        email:
+          type: string
+        current_living_address:
+          $ref: '#/components/schemas/CustomerAddress'
+      required:
+        - id
+        - first_name
+        - last_name
+        - age
+    CustomerAddress:
+      properties:
+        street:
+          type: string
+        house_number:
+          type: string
+        postal_code:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      required:
+        - street
+        - house_number
+        - postal_code
+        - city
+        - country
