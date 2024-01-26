@@ -68,7 +68,52 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CustomerResponse'
-
+  /customers/{id}/address:
+    put:
+      summary: Updates a specific customer address.
+      description:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The user id to update the data for
+      responses:
+        '200': # status code
+          description: Returns the updated customer data if the customer is found in the service repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          description: The customer id is not known to the system
+  /customers/{id}/address/email/{email}:
+    put:
+      summary: Updates a specific customer address.
+      description:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The user id to update the data for
+        - in: path
+          name: email
+          schema:
+            type: string
+          required: true
+          description: The user email to update
+      responses:
+        '200': # status code
+          description: Returns the updated customer data if the customer is found in the service repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          description: The customer id is not known to the system
   /customers:
     get:
       summary: Returns a list of customers.

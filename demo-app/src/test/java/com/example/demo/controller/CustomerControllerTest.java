@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -18,8 +17,7 @@ import java.util.List;
 
 import static com.example.demo.RequestSampleUtil.*;
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,10 +34,28 @@ class CustomerControllerTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final CustomerRequest VALID_CUSTOMER_REQUEST = getCustomerRequestSample(VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
     private static final String VALID_CUSTOMER_REQUEST_PAYLOAD = getCustomerRequestPayload();
 
     private static final CustomerResponse CUSTOMER_RESPONSE = getCustomerResponseSample(VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
+
+    @Test
+    @Order(1)
+    void setup() throws Exception {
+        this.mockMvc.perform(delete(BASE_API + "/customers"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(2)
+    void successfullyCreateCustomer() throws Exception {
+        this.mockMvc.perform(post(BASE_API + "/customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(VALID_CUSTOMER_REQUEST_PAYLOAD))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().string(containsString(getCustomerResponsePayload())));
+    }
 
     @Test
     void successfullyGetAllCustomers() throws Exception {
@@ -81,16 +97,6 @@ class CustomerControllerTest {
                 .andExpect(content().string(containsString("[]")));
     }
 
-    @Test
-    @Order(1)
-    void successfullyCreateCustomer() throws Exception {
-        this.mockMvc.perform(post(BASE_API + "/customer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(VALID_CUSTOMER_REQUEST_PAYLOAD))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString(getCustomerResponsePayload())));
-    }
 
     @Test
     void successfullyRetrieveCustomer() throws Exception {
@@ -124,16 +130,6 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(getCustomerRequestSample(MISSING_EMAIL_ADDRESS, EMPTY_CUSTOMER_ADDRESS))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-    }
-
-    @SneakyThrows
-    private static String getCustomerRequestPayload() {
-        return objectMapper.writeValueAsString(VALID_CUSTOMER_REQUEST);
-    }
-
-    @SneakyThrows
-    private static String getCustomerResponsePayload() {
-        return objectMapper.writeValueAsString(CUSTOMER_RESPONSE);
     }
 
     @SneakyThrows
