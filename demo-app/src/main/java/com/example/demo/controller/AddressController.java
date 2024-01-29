@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.mappers.CustomerAddressMapper;
+import com.example.demo.controller.mappers.CustomerMapper;
 import com.example.demo.models.CustomerAddress;
 import com.example.demo.models.CustomerResponse;
 import com.example.demo.service.CustomerService;
@@ -19,21 +21,25 @@ public class AddressController {
 
     private final CustomerService customerService;
 
+    private final CustomerMapper customerMapper;
+
+    private final CustomerAddressMapper customerAddressMapper;
+
     @PutMapping("/customer/{id}/address")
-    ResponseEntity<CustomerResponse> updateCustomerAddress(@RequestBody @Valid CustomerAddress customerAddress, @PathVariable String id) {
+    ResponseEntity<CustomerResponse> updateCustomerAddress(@RequestBody @Valid CustomerAddress customerAddress, @PathVariable Long id) {
         log.info("Received request to update customer address for customer id: {}", id);
         return customerService.findCustomerById(id)
-                .map(cust -> ResponseEntity.ok(customerService.updateCustomerAddress(cust, customerAddress)))
+                .map(cust -> ResponseEntity.ok(customerMapper.dtoToResponse(customerService.updateCustomerAddress(cust, customerAddressMapper.requestToDTO(customerAddress)))))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/customer/{id}/address/email/{email}")
-    ResponseEntity<CustomerResponse> updateCustomerEmail(@PathVariable String id, @PathVariable String email) {
+    ResponseEntity<CustomerResponse> updateCustomerEmail(@PathVariable Long id, @PathVariable String email) {
         return customerService.findCustomerById(id)
-                .map(cust -> ResponseEntity.ok(customerService.updateCustomerEmail(cust, email)))
+                .map(cust ->
+                        ResponseEntity.ok(customerMapper.dtoToResponse(customerService.updateCustomerEmail(cust, email))))
                 .orElse(ResponseEntity.notFound().build());
     }
-
 
 
 }
