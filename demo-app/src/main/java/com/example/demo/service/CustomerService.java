@@ -4,6 +4,7 @@ import com.example.demo.controller.mappers.CustomerAddressMapper;
 import com.example.demo.controller.mappers.CustomerMapper;
 import com.example.demo.controller.models.CustomerAddressDTO;
 import com.example.demo.controller.models.CustomerDTO;
+import com.example.demo.controller.models.entities.Customer;
 import com.example.demo.models.CustomerAddress;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
@@ -75,9 +76,9 @@ public class CustomerService {
 
     public CustomerDTO updateCustomerAddress(@NonNull @Valid CustomerDTO customer, @NonNull @Valid CustomerAddressDTO address) {
         log.info("Updating customer address for customer id:{}", customer.getId());
-        customerMapper.dtoToEntity(customer)
-                .setCurrentLivingAddress(customerAddressMapper.dtoToEntity(address));
-        return customerMapper.entityToDTO(customerRepository.save(customerMapper.dtoToEntity(customer)));
+        Customer updatedCustomer = customerMapper.dtoToEntity(customer);
+        updatedCustomer.setCurrentLivingAddress(customerAddressMapper.dtoToEntity(address));
+        return customerMapper.entityToDTO(customerRepository.save(updatedCustomer));
     }
 
     public CustomerDTO updateCustomerEmail(@NonNull @Valid CustomerDTO customer, @NonNull String email) {
