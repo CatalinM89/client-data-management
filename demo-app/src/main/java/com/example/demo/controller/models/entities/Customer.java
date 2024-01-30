@@ -11,18 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@IdClass(CustomerKey.class)
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "first_name", "last_name" }) })
 public class Customer {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Id
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Id
     @Column(name = "last_name", nullable = false)
     private String lastName;
 

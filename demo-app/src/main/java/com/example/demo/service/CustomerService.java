@@ -5,7 +5,6 @@ import com.example.demo.controller.mappers.CustomerMapper;
 import com.example.demo.controller.models.CustomerAddressDTO;
 import com.example.demo.controller.models.CustomerDTO;
 import com.example.demo.controller.models.entities.Customer;
-import com.example.demo.models.CustomerResponse;
 import com.example.demo.repository.CustomerRepository;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
@@ -14,7 +13,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,9 +21,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CustomerService {
-
-    private final List<CustomerResponse> customers = new ArrayList<>();
-
 
     private final CustomerRepository customerRepository;
 
@@ -49,10 +44,7 @@ public class CustomerService {
 
     public boolean isCustomerRegistered(@NonNull String firstName, @NonNull String lastName) {
         log.info("Validating if the customer is already registered by first name:{}, and last name:{}", firstName, lastName);
-        Optional<CustomerResponse> customer = customers.stream()
-                .filter(cust -> cust.getFirstName().equals(firstName) && cust.getLastName().equals(lastName))
-                .findFirst();
-        return customer.isPresent();
+        return customerRepository.findByFirstNameAndLastName(firstName, lastName).isPresent();
     }
 
     public List<CustomerDTO> getAllCustomers() {
@@ -80,8 +72,4 @@ public class CustomerService {
         return customerMapper.entityToDTO(customerRepository.save(updatedCustomer));
     }
 
-    public void deleteAll() {
-        log.error("THIS IS A TEMPORARY solution until a valid in memory db is used, ");
-        customers.clear();
-    }
 }

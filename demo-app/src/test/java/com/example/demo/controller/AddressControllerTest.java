@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.example.demo.RequestSampleUtil.*;
@@ -20,23 +21,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
 class AddressControllerTest {
 
     private static final String BASE_API = "/api/v1";
+
+    private static final Long CUSTOMER_ID = 1L;
 
     private static final String VALID_CUSTOMER_REQUEST_PAYLOAD = getCustomerRequestPayload();
 
     @Autowired
     private MockMvc mockMvc;
 
-
-    @Test
-    @Order(0)
-    void setup() throws Exception {
-        this.mockMvc.perform(delete(BASE_API + "/customers"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
     @Test
     @Order(1)
     void successfullyCreateCustomer() throws Exception {
@@ -51,7 +47,7 @@ class AddressControllerTest {
     @Test
     @Order(2)
     void successfullyUpdateAddress() throws Exception {
-        this.mockMvc.perform(put(BASE_API + "/customer/{id}/address", "Catalin")
+        this.mockMvc.perform(put(BASE_API + "/customer/{id}/address", CUSTOMER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getCustomerAddressPayload()))
                 .andDo(print())
@@ -63,7 +59,7 @@ class AddressControllerTest {
     @Test
     @Order(3)
     void successfullyRetrieveCustomer() throws Exception {
-        this.mockMvc.perform(get(BASE_API + "/customer/Catalin"))
+        this.mockMvc.perform(get(BASE_API + "/customer/{id}", CUSTOMER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(getUpdateAddressCustomerResponsePayload())));
@@ -73,7 +69,7 @@ class AddressControllerTest {
     @Test
     @Order(4)
     void successfullyUpdateCustomerEmail() throws Exception {
-        this.mockMvc.perform(put(BASE_API + "/customer/{id}/address/email/{email}", "Catalin", "secondemail@test.com"))
+        this.mockMvc.perform(put(BASE_API + "/customer/{id}/address/email/{email}", CUSTOMER_ID, "secondemail@test.com"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(getUpdateAddressAndEmailCustomerResponsePayload())));
@@ -82,7 +78,7 @@ class AddressControllerTest {
     @Test
     @Order(5)
     void successfullyRetrieveUpdatedCustomer() throws Exception {
-        this.mockMvc.perform(get(BASE_API + "/customer/Catalin"))
+        this.mockMvc.perform(get(BASE_API + "/customer/{id}", CUSTOMER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(getUpdateAddressAndEmailCustomerResponsePayload())));
