@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -25,9 +26,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
 class CustomerControllerTest {
 
     private static final String BASE_API = "/api/v1";
+
+    private static final Long CUSTOMER_ID = 1L;
+    private static final Long UNKNOWN_CUSTOMER_ID = 10L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,14 +45,6 @@ class CustomerControllerTest {
 
     @Test
     @Order(1)
-    void setup() throws Exception {
-        this.mockMvc.perform(delete(BASE_API + "/customers"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @Order(2)
     void successfullyCreateCustomer() throws Exception {
         this.mockMvc.perform(post(BASE_API + "/customer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +97,7 @@ class CustomerControllerTest {
 
     @Test
     void successfullyRetrieveCustomer() throws Exception {
-        this.mockMvc.perform(get(BASE_API + "/customer/Catalin"))
+        this.mockMvc.perform(get(BASE_API + "/customer/{id}", CUSTOMER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(getCustomerResponsePayload())));
@@ -109,7 +106,7 @@ class CustomerControllerTest {
 
     @Test
     void failToRetrieveUnknownCustomer() throws Exception {
-        this.mockMvc.perform(get(BASE_API + "/customer/CCatalin"))
+        this.mockMvc.perform(get(BASE_API + "/customer/{id}", UNKNOWN_CUSTOMER_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

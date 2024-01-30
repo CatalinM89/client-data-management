@@ -30,7 +30,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: string
+            type: integer
+            format: int64
           required: true
           description: The user id to retrieve the data for
       responses:
@@ -76,7 +77,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: string
+            type: integer
+            format: int64
           required: true
           description: The user id to update the data for
       responses:
@@ -96,7 +98,8 @@ paths:
         - in: path
           name: id
           schema:
-            type: string
+            type: integer
+            format: int64
           required: true
           description: The user id to update the data for
         - in: path
@@ -156,7 +159,8 @@ components:
     CustomerResponse:
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
           description: Unique id generated for the customer.
         first_name:
           type: string
