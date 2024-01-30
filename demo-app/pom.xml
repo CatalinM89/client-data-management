@@ -11,6 +11,10 @@
   <version>${revision}</version>
   <name>demo-app</name>
 
+  <properties>
+  <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.example</groupId>
@@ -20,30 +24,13 @@
     <dependency>
       <groupId>org.openapitools</groupId>
       <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.6</version>
+      <version>${jackson-databind-nullable.version}</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.projectlombok</groupId>-->
-<!--      <artifactId>lombok</artifactId>-->
-<!--     <version>1.18.30</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.mapstruct</groupId>-->
-<!--      <artifactId>mapstruct</artifactId>-->
-<!--      <version>1.5.5.Final</version>-->
-<!--    </dependency>-->
-    <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
-<!--    <dependency>-->
-<!--      <groupId>org.assertj</groupId>-->
-<!--      <artifactId>assertj-core</artifactId>-->
-<!--      <version>3.25.1</version>-->
-<!--      <scope>test</scope>-->
-<!--    </dependency>-->
 
   </dependencies>
 
