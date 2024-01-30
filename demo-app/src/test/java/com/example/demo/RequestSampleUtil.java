@@ -36,7 +36,7 @@ public class RequestSampleUtil {
 
     public static final CustomerAddress VALID_CUSTOMER_ADDRESS = new CustomerAddress(STREET, HOUSE_NUMBER, ZIP_CODE, CITY, COUNTRY);
 
-    public static final CustomerAddress VALID_UPDATED_CUSTOMER_ADDRESS = VALID_CUSTOMER_ADDRESS.street(NEW_STREET);
+    public static final CustomerAddress VALID_UPDATED_CUSTOMER_ADDRESS = new CustomerAddress(NEW_STREET, HOUSE_NUMBER, ZIP_CODE, CITY, COUNTRY);
     public static final String CUSTOMER_NAME = "Catalin";
     public static final String CUSTOMER_LAST_NAME = "Moisa";
     public static final int CUSTOMER_AGE = 34;
