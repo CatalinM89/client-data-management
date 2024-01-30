@@ -1,18 +1,20 @@
 package com.example.demo.controller.mappers;
 
-import com.example.demo.controller.models.entities.Customer;
 import com.example.demo.controller.models.CustomerDTO;
+import com.example.demo.controller.models.entities.Customer;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
-import lombok.NonNull;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
-    Customer requestToEntity(@NonNull CustomerRequest customer);
+    @Mapping(target = "id", ignore = true)
+    Customer requestToEntity(CustomerRequest customer);
 
-    Customer dtoToEntity(@NonNull CustomerDTO customer);
-//    @Mapping(target = "age", source = "customer.age")
+    Customer dtoToEntity(CustomerDTO customer);
+
+    @Mapping(target = "id", ignore = true)
     CustomerDTO requestToDTO(CustomerRequest customer);
 
     CustomerDTO entityToDTO(Customer customer);
