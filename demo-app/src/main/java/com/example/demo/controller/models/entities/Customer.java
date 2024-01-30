@@ -27,7 +27,7 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
-    @Column()
+    @Column
     private String email;
 
     @Embedded

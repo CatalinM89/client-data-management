@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Address {
 
-    @Column(nullable = false)
+    @Column
     private String street;
 
-    @Column(name = "house_number", nullable = false)
+    @Column(name = "house_number")
     private String houseNumber;
 
-    @Column(name = "postal_code", nullable = false)
+    @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(nullable = false)
+    @Column
     private String city;
 
-    @Column(nullable = false)
+    @Column
     private String country;
 
 }
