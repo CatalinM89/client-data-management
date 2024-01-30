@@ -42,9 +42,15 @@ class CustomerServiceTest {
     private static final CustomerAddressDTO EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO = getCustomerAddressDTOSample(NEW_STREET);
     private static final Customer EXPECTED_CUSTOMER_ENTITY = getCustomerEntitySample(MISSING_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
 
-    private static final Customer EXPECTED_UPDATED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+    private static final Customer EXPECTED_UPDATED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY);
 
     private static final Customer EXPECTED_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+
+    private static final Customer EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+
+    private static final CustomerDTO EXPECTED_PERSISTED_UPDATED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, getUpdatedCustomerAddress(NEW_STREET));
+    private static final CustomerDTO EXPECTED_EMAIL_UPDATED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, getUpdatedCustomerAddress(NEW_STREET));
+
 
     private static final CustomerResponse EXPECTED_DB_UPDATED_CUSTOMER_ADDRESS = getCustomerResponseSample(VALID_UPDATED_CUSTOMER_EMAIL, VALID_UPDATED_CUSTOMER_ADDRESS);
 
@@ -66,11 +72,6 @@ class CustomerServiceTest {
         MockitoAnnotations.openMocks(this);
         customerService = new CustomerService(customerRepository, customerMapper, customerAddressMapper);
     }
-//    @Before
-//    public void setup() {
-//        customerService = new CustomerService(customerRepository, customerMapper);
-//        //customerService.saveCustomer(EXPECTED_DB_CUSTOMER);
-//    }
 
     @Test
     @Order(0)
@@ -142,14 +143,18 @@ class CustomerServiceTest {
     @Test
     public void updateCustomerAddressSuccessfully() {
         when(customerMapper.dtoToEntity(EXPECTED_PERSISTED_CUSTOMER_DTO)).thenReturn(EXPECTED_PERSISTED_CUSTOMER_ENTITY);
-        when(customerAddressMapper.dtoToEntity(EXPECTED_CUSTOMER_ADDRESS_DTO)).thenReturn(EXPECTED_CUSTOMER_ADDRESS_ENTITY);
-        when(customerService.saveCustomer(EXPECTED_UPDATED_)).thenReturn(EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO);
-        assertEquals(customerService.updateCustomerAddress(EXPECTED_PERSISTED_CUSTOMER_DTO, EXPECTED_CUSTOMER_ADDRESS_DTO), EXPECTED_DB_UPDATED_CUSTOMER_ADDRESS);
+        when(customerAddressMapper.dtoToEntity(EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO)).thenReturn(EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY);
+        when(customerRepository.save(EXPECTED_UPDATED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_UPDATED_CUSTOMER_ENTITY);
+        when(customerMapper.entityToDTO(EXPECTED_UPDATED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_PERSISTED_UPDATED_CUSTOMER_DTO);
+        assertEquals(customerService.updateCustomerAddress(EXPECTED_PERSISTED_CUSTOMER_DTO, EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO), EXPECTED_PERSISTED_UPDATED_CUSTOMER_DTO);
     }
 
     @Test
     public void updateCustomerEmailSuccessfully() {
-        assertEquals(customerService.updateCustomerEmail(EXPECTED_DB_CUSTOMER, VALID_UPDATED_CUSTOMER_EMAIL), EXPECTED_DB_UPDATED_CUSTOMER_EMAIL);
+        when(customerMapper.dtoToEntity(EXPECTED_PERSISTED_CUSTOMER_DTO)).thenReturn(EXPECTED_PERSISTED_CUSTOMER_ENTITY);
+        when(customerRepository.save(EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY);
+        when(customerMapper.entityToDTO(EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_EMAIL_UPDATED_CUSTOMER_DTO);
+        assertEquals(customerService.updateCustomerEmail(EXPECTED_PERSISTED_CUSTOMER_DTO, VALID_UPDATED_CUSTOMER_EMAIL), EXPECTED_EMAIL_UPDATED_CUSTOMER_DTO);
     }
 
 }

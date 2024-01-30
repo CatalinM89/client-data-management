@@ -5,8 +5,6 @@ import com.example.demo.controller.mappers.CustomerMapper;
 import com.example.demo.controller.models.CustomerAddressDTO;
 import com.example.demo.controller.models.CustomerDTO;
 import com.example.demo.controller.models.entities.Customer;
-import com.example.demo.models.CustomerAddress;
-import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
 import com.example.demo.repository.CustomerRepository;
 import jakarta.annotation.Nullable;
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -48,10 +45,6 @@ public class CustomerService {
                 .stream()
                 .map(customerMapper::entityToDTO)
                 .collect(Collectors.toList());
-//        return Stream.concat(
-//                        (firstName == null) ? Stream.empty() : customers.stream().filter(cust -> cust.getFirstName().equals(firstName)),
-//                        (lastName == null) ? Stream.empty() : customers.stream().filter(cust -> cust.getLastName().equals(lastName)))
-//                .collect(Collectors.toList());
     }
 
     public boolean isCustomerRegistered(@NonNull String firstName, @NonNull String lastName) {
@@ -66,7 +59,6 @@ public class CustomerService {
         return customerRepository.findAll().stream()
                 .map(customerMapper::entityToDTO)
                 .collect(Collectors.toList());
-        //return customers;
     }
 
     public CustomerDTO saveCustomer(@NonNull @Valid CustomerDTO customer) {
@@ -83,13 +75,9 @@ public class CustomerService {
 
     public CustomerDTO updateCustomerEmail(@NonNull @Valid CustomerDTO customer, @NonNull String email) {
         log.info("Updating customer email for customer id:{}", customer.getId());
-        customer.setEmail(email);
-//        CustomerResponse updateRequest = new CustomerResponse(customer.getFirstName(), customer.getFirstName(),
-//                customer.getLastName(), customer.getAge());
-//        updateRequest.setEmail(email);
-//        updateRequest.setCurrentLivingAddress(customer.getCurrentLivingAddress());
-        //return saveCustomer(customer);
-        return customer;
+        Customer updatedCustomer = customerMapper.dtoToEntity(customer);
+        updatedCustomer.setEmail(email);
+        return customerMapper.entityToDTO(customerRepository.save(updatedCustomer));
     }
 
     public void deleteAll() {

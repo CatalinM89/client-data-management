@@ -96,6 +96,10 @@ public class RequestSampleUtil {
                 .build();
     }
 
+    public static CustomerAddress getUpdatedCustomerAddress(String street) {
+        return new CustomerAddress(street, HOUSE_NUMBER, ZIP_CODE, CITY, COUNTRY);
+    }
+
     public static CustomerAddressDTO getCustomerAddressDTOSample(String street) {
         return CustomerAddressDTO.builder()
                 .street(street)
