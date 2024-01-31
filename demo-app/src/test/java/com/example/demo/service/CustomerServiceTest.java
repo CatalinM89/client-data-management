@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.mappers.CustomerAddressMapper;
-import com.example.demo.controller.mappers.CustomerMapper;
-import com.example.demo.controller.models.CustomerAddressDTO;
-import com.example.demo.controller.models.CustomerDTO;
-import com.example.demo.controller.models.entities.Address;
-import com.example.demo.controller.models.entities.Customer;
+import com.example.demo.mappers.CustomerAddressMapper;
+import com.example.demo.mappers.CustomerMapper;
+import com.example.demo.models.CustomerAddressDTO;
+import com.example.demo.models.CustomerDTO;
+import com.example.demo.models.entities.Address;
+import com.example.demo.models.entities.Customer;
 import com.example.demo.models.CustomerResponse;
 import com.example.demo.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;

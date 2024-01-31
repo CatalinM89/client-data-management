@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.mappers.CustomerMapper;
+import com.example.demo.mappers.CustomerMapper;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
 import com.example.demo.service.CustomerService;

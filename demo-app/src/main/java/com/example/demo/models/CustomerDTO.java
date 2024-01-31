@@ -1,4 +1,4 @@
-package com.example.demo.controller.models;
+package com.example.demo.models;
 
 import com.example.demo.models.CustomerAddress;
 import lombok.Builder;

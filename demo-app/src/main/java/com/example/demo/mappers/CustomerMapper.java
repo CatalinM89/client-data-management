@@ -1,7 +1,7 @@
-package com.example.demo.controller.mappers;
+package com.example.demo.mappers;
 
-import com.example.demo.controller.models.CustomerDTO;
-import com.example.demo.controller.models.entities.Customer;
+import com.example.demo.models.CustomerDTO;
+import com.example.demo.models.entities.Customer;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
 import org.mapstruct.Mapper;

@@ -1,7 +1,8 @@
 package com.example.demo.controller.mappers;
 
-import com.example.demo.controller.models.CustomerDTO;
-import com.example.demo.controller.models.entities.Customer;
+import com.example.demo.models.CustomerDTO;
+import com.example.demo.models.entities.Customer;
+import com.example.demo.mappers.CustomerMapper;
 import com.example.demo.models.CustomerResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
