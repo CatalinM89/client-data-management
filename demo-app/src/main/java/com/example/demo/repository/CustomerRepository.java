@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.controller.models.entities.Customer;
+import com.example.demo.models.entities.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

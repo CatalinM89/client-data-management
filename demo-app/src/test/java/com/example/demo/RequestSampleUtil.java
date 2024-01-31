@@ -1,9 +1,9 @@
 package com.example.demo;
 
-import com.example.demo.controller.models.CustomerAddressDTO;
-import com.example.demo.controller.models.CustomerDTO;
-import com.example.demo.controller.models.entities.Address;
-import com.example.demo.controller.models.entities.Customer;
+import com.example.demo.models.CustomerAddressDTO;
+import com.example.demo.models.CustomerDTO;
+import com.example.demo.models.entities.Address;
+import com.example.demo.models.entities.Customer;
 import com.example.demo.models.CustomerAddress;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
