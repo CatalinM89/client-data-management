@@ -12,7 +12,9 @@
   <name>demo-app</name>
 
   <properties>
-  <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+    <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+    <springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
   </properties>
 
   <dependencies>
@@ -32,6 +34,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -47,6 +55,64 @@
             </exclude>
           </excludes>
         </configuration>
+      </plugin>
+<!--        <plugin>-->
+<!--          <groupId>org.apache.maven.plugins</groupId>-->
+<!--          <artifactId>maven-surefire-plugin</artifactId>-->
+<!--          <version>3.1.2</version>-->
+<!--        </plugin>-->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>com/example/demo/models/**</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+<!--            <phase>test</phase>-->
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+              <rules>
+<!--                <rule>-->
+<!--                  <element>PACKAGE</element>-->
+<!--                  <limits>-->
+<!--                    <limit>-->
+<!--                      <counter>LINE</counter>-->
+<!--                      <value>COVEREDRATIO</value>-->
+<!--                      <minimum>0.80</minimum>-->
+<!--                    </limit>-->
+<!--                  </limits>-->
+<!--                </rule>-->
+              </rules>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jacoco-site</id>
+            <phase>package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
