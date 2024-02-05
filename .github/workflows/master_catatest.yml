@@ -59,9 +59,11 @@ jobs:
       #     app-name: 'catatest'
       #     slot-name: 'Production'
       #     package: '*.jar'
-      # checkout the repo
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@main
+      - uses: actions/checkout@v4
+      - name: Set up Java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
       - name: 'Build and push image'
         uses: azure/docker-login@v1
         with:
