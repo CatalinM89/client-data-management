@@ -59,11 +59,6 @@ jobs:
           app-name: 'catatest'
           slot-name: 'Production'
           package: '*.jar'
-
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Build and push image
         id: build-image
         run: |
