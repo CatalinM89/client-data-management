@@ -68,13 +68,13 @@ jobs:
       - name: Build and push image
         id: build-image
         run: |
-         az acr build --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }} --registry ${{ secrets.REGISTRY_LOGIN_SERVER }}      
+         az acr build --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/customerdm:${{ github.sha }} --registry ${{ secrets.REGISTRY_LOGIN_SERVER }}      
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
         with:
          resource-group: ${{ secrets.RESOURCE_GROUP }}
          dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }}
+         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/customerdm:${{ github.sha }}
          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
          registry-username: ${{ secrets.REGISTRY_USERNAME }}
          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
