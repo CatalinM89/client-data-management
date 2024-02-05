@@ -62,6 +62,7 @@ jobs:
       - name: Build and push image
         id: build-image
         run: |
+         az acr login --name customerdm.azurecr.io 
          az acr build --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }} --registry ${{ secrets.REGISTRY_LOGIN_SERVER }} --file "Dockerfile" .
       
       - name: 'Deploy to Azure Container Instances'
