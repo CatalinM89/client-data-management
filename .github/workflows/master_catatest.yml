@@ -77,7 +77,7 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }}
-          file: client-data-management/client-data-management/Dockerfile
+          file: client-data-management/Dockerfile
           #/home/runner/work/client-data-management/client-data-management/demo-app/target/demo-app-1.0.0-SNAPSHOT.jar
       # - run: |
       #     mvn clean install
