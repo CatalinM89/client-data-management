@@ -52,13 +52,16 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_485C99F4AE7D490F8D8B2817B9F810D2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_03242D403CE44834A47160E6E169A9FB }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'catatest'
-          slot-name: 'Production'
-          package: '*.jar'
+      # - name: Deploy to Azure Web App
+      #   id: deploy-to-webapp
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: 'catatest'
+      #     slot-name: 'Production'
+      #     package: '*.jar'
+      # checkout the repo
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
       - name: 'Build and push image'
         uses: azure/docker-login@v1
         with:
