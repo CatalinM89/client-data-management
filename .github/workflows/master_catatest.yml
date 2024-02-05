@@ -59,10 +59,17 @@ jobs:
           app-name: 'catatest'
           slot-name: 'Production'
           package: '*.jar'
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: 'Build and push image'
         uses: azure/docker-login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
           docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }}
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/customer-data-management:${{ github.sha }}
