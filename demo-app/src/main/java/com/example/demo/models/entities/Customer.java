@@ -1,10 +1,7 @@
 package com.example.demo.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -12,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "first_name", "last_name" }) })
-public class Customer {
+public final class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -36,6 +33,9 @@ public class Customer {
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code"))
     })
     private Address currentLivingAddress;
+
+    @Version
+    private Long version;
 
 
 }

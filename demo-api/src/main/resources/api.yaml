@@ -45,7 +45,7 @@ paths:
           description: The customer id is not known to the system
   /customer/find:
     get:
-      summary: Returns filtered list by first_name or last_name (or both).
+      summary: Returns filtered list by case-insensitive partial first_name or last_name (or both).
       description:
       parameters:
         - in: query

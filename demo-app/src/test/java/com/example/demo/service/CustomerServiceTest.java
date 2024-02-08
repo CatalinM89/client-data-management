@@ -6,7 +6,6 @@ import com.example.demo.models.CustomerAddressDTO;
 import com.example.demo.models.CustomerDTO;
 import com.example.demo.models.entities.Address;
 import com.example.demo.models.entities.Customer;
-import com.example.demo.models.CustomerResponse;
 import com.example.demo.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.example.demo.RequestSampleUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,34 +25,23 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
 
-    private static final CustomerResponse EXPECTED_DB_CUSTOMER = getCustomerResponseSample(VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
+    private static final CustomerDTO EXPECTED_CUSTOMER_DTO = getCustomerDTOSample(MISSING_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS, MISSING_VERSION);
 
-    private static final CustomerDTO EXPECTED_CUSTOMER_DTO = getCustomerDTOSample(MISSING_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
-
-    private static final CustomerDTO EXPECTED_PERSISTED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
+    private static final CustomerDTO EXPECTED_PERSISTED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS, MISSING_VERSION);
 
     private static final Address EXPECTED_CUSTOMER_ADDRESS_ENTITY = getCustomerAddressEntitySample(STREET);
 
     private static final Address EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY = getCustomerAddressEntitySample(NEW_STREET);
 
-    private static final CustomerAddressDTO EXPECTED_CUSTOMER_ADDRESS_DTO = getCustomerAddressDTOSample(STREET);
-
     private static final CustomerAddressDTO EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO = getCustomerAddressDTOSample(NEW_STREET);
-    private static final Customer EXPECTED_CUSTOMER_ENTITY = getCustomerEntitySample(MISSING_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+    private static final Customer EXPECTED_CUSTOMER_ENTITY = getCustomerEntitySample(MISSING_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY, MISSING_VERSION);
 
-    private static final Customer EXPECTED_UPDATED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY);
+    private static final Customer EXPECTED_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY, 1L);
 
-    private static final Customer EXPECTED_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+    private static final Customer EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY, 1L);
 
-    private static final Customer EXPECTED_EMAIL_PERSISTED_CUSTOMER_ENTITY = getCustomerEntitySample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
+    private static final CustomerDTO EXPECTED_EMAIL_UPDATED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, getUpdatedCustomerAddress(STREET), MISSING_VERSION);
 
-    private static final CustomerDTO EXPECTED_PERSISTED_UPDATED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, getUpdatedCustomerAddress(NEW_STREET));
-    private static final CustomerDTO EXPECTED_EMAIL_UPDATED_CUSTOMER_DTO = getCustomerDTOSample(VALID_ID, VALID_UPDATED_CUSTOMER_EMAIL, getUpdatedCustomerAddress(STREET));
-
-
-    private static final CustomerResponse EXPECTED_DB_UPDATED_CUSTOMER_ADDRESS = getCustomerResponseSample(VALID_UPDATED_CUSTOMER_EMAIL, VALID_UPDATED_CUSTOMER_ADDRESS);
-
-    private static final CustomerResponse EXPECTED_DB_UPDATED_CUSTOMER_EMAIL = getCustomerResponseSample(VALID_UPDATED_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
 
     @Mock
     private CustomerRepository customerRepository;
@@ -102,7 +91,7 @@ class CustomerServiceTest {
 
     @Test
     public void findByNamesSuccessfully() {
-        when(customerRepository.findByFirstNameOrLastName("Vasile", "Moisa")).thenReturn(List.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
+        when(customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("Vasile", "Moisa")).thenReturn(Set.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
         when(customerMapper.entityToDTO(EXPECTED_PERSISTED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_PERSISTED_CUSTOMER_DTO);
         List<CustomerDTO> customerByFirstName = customerService.findByNames("Vasile", "Moisa");
         assertIterableEquals(customerByFirstName, List.of(EXPECTED_PERSISTED_CUSTOMER_DTO));
@@ -110,7 +99,7 @@ class CustomerServiceTest {
 
     @Test
     public void findByLastNameSuccessfully() {
-        when(customerRepository.findByFirstNameOrLastName(null, "Moisa")).thenReturn(List.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
+        when(customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(null, "Moisa")).thenReturn(Set.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
         when(customerMapper.entityToDTO(EXPECTED_PERSISTED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_PERSISTED_CUSTOMER_DTO);
         List<CustomerDTO> customerByFirstName = customerService.findByNames(null, "Moisa");
         assertIterableEquals(customerByFirstName, List.of(EXPECTED_PERSISTED_CUSTOMER_DTO));
@@ -118,7 +107,7 @@ class CustomerServiceTest {
 
     @Test
     public void findByFirstNameSuccessfully() {
-        when(customerRepository.findByFirstNameOrLastName("Catalin", null)).thenReturn(List.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
+        when(customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("Catalin", null)).thenReturn(Set.of(EXPECTED_PERSISTED_CUSTOMER_ENTITY));
         when(customerMapper.entityToDTO(EXPECTED_PERSISTED_CUSTOMER_ENTITY)).thenReturn(EXPECTED_PERSISTED_CUSTOMER_DTO);
         List<CustomerDTO> customerByFirstName = customerService.findByNames("Catalin", null);
         assertIterableEquals(customerByFirstName, List.of(EXPECTED_PERSISTED_CUSTOMER_DTO));
@@ -135,10 +124,10 @@ class CustomerServiceTest {
 
     @Test
     public void updateCustomerAddressSuccessfully() {
-        CustomerDTO customerDTOSample = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS);
-        CustomerDTO updatedTest = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_UPDATED_CUSTOMER_ADDRESS);
-        Customer mappedEntity = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY);
-        Customer updatedEntity= getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY);
+        CustomerDTO customerDTOSample = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_ADDRESS, MISSING_VERSION);
+        CustomerDTO updatedTest = getCustomerDTOSample(VALID_ID, VALID_CUSTOMER_EMAIL, VALID_UPDATED_CUSTOMER_ADDRESS, MISSING_VERSION);
+        Customer mappedEntity = getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_CUSTOMER_ADDRESS_ENTITY, MISSING_VERSION);
+        Customer updatedEntity= getCustomerEntitySample(VALID_ID, VALID_CUSTOMER_EMAIL, EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY, MISSING_VERSION);
 
         when(customerMapper.dtoToEntity(customerDTOSample)).thenReturn(mappedEntity);
         when(customerAddressMapper.dtoToEntity(EXPECTED_UPDATED_CUSTOMER_ADDRESS_DTO)).thenReturn(EXPECTED_UPDATED_CUSTOMER_ADDRESS_ENTITY);
