@@ -54,6 +54,9 @@ class AddressControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(getUpdateAddressCustomerResponsePayload())));
 
+        this.mockMvc.perform(get(BASE_API + "/customer/{id}", CUSTOMER_ID))
+                .andDo(print());
+
 
     }
     @Test

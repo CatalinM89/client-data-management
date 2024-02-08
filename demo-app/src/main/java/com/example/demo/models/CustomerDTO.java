@@ -18,4 +18,6 @@ public class CustomerDTO {
     private String email;
 
     private CustomerAddress currentLivingAddress;
+
+    private Long version;
 }

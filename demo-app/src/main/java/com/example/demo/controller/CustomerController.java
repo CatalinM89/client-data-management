@@ -64,9 +64,9 @@ public class CustomerController {
     @GetMapping("/customer/find")
     ResponseEntity<List<CustomerResponse>> findCustomerByName(@RequestParam(name = "first_name", required = false) String firstName,
                                                               @RequestParam(name = "last_name", required = false) String lastName) {
-        // If no search criteria provided then default to a bad request
+        // If no search criteria provided then return an empty list
         if (firstName == null && lastName == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok(List.of());
         }
         return ResponseEntity.ok(customerService.findByNames(firstName, lastName).stream()
                 .map(customerMapper::dtoToResponse)

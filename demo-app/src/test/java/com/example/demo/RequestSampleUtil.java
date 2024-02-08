@@ -32,6 +32,8 @@ public class RequestSampleUtil {
 
     public static final Long MISSING_ID = null;
 
+    public static final Long MISSING_VERSION = null;
+
     public static final String VALID_UPDATED_CUSTOMER_EMAIL = "secondemail@test.com";
 
     public static final CustomerAddress VALID_CUSTOMER_ADDRESS = new CustomerAddress(STREET, HOUSE_NUMBER, ZIP_CODE, CITY, COUNTRY);
@@ -64,7 +66,7 @@ public class RequestSampleUtil {
         return customerResponse;
     }
 
-    public static CustomerDTO getCustomerDTOSample(Long id, String email, CustomerAddress address) {
+    public static CustomerDTO getCustomerDTOSample(Long id, String email, CustomerAddress address, Long version) {
         return CustomerDTO.builder()
                 .id(id)
                 .firstName(CUSTOMER_NAME)
@@ -72,10 +74,11 @@ public class RequestSampleUtil {
                 .age(CUSTOMER_AGE)
                 .email(email)
                 .currentLivingAddress(address)
+                .version(version)
                 .build();
     }
 
-    public static Customer getCustomerEntitySample(Long id, String email, Address address) {
+    public static Customer getCustomerEntitySample(Long id, String email, Address address, Long entityVersion) {
         return Customer.builder()
                 .id(id)
                 .firstName(CUSTOMER_NAME)
@@ -83,6 +86,7 @@ public class RequestSampleUtil {
                 .age(CUSTOMER_AGE)
                 .email(email)
                 .currentLivingAddress(address)
+                .version(entityVersion)
                 .build();
     }
 

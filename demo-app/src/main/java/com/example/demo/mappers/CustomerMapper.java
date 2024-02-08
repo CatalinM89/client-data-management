@@ -7,6 +7,12 @@ import com.example.demo.models.CustomerResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+
+/**
+ * Mapping component to facilitate model conversions from request model to transfer object, from a transfer object to
+ * the Customer entity, from entity to transfer object
+ * @author Catalin Moisa
+ */
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
     @Mapping(target = "id", ignore = true)
