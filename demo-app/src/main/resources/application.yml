@@ -11,3 +11,10 @@ spring:
 hibernate:
   hbm2ddl:
     auto: update
+
+restrictions:
+  customer:
+    min:
+      age: 18
+    birthdate:
+      format: dd-MM-yyyy

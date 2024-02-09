@@ -22,4 +22,4 @@ docker container stop  customer-data-management
 https://docs.docker.com/engine/reference/commandline/container_run/
 https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/docker-install.html
 ## Contact
-Catalin Moisa -- catalin.moisa89@gmail.com
+Catalin Moisa
