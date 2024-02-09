@@ -3,6 +3,7 @@ package com.example.demo.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 @Data
 @Builder
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public final class Customer extends BaseEntity {
     private String lastName;
 
     @Column(nullable = false)
-    private Integer age;
+    private LocalDate birthdate;
 
     @Column
     private String email;
@@ -36,6 +37,5 @@ public final class Customer extends BaseEntity {
 
     @Version
     private Long version;
-
 
 }
