@@ -8,6 +8,7 @@ import com.example.demo.models.entities.Customer;
 import com.example.demo.repository.CustomerRepository;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -107,7 +108,7 @@ public class CustomerService {
      * @return  a customer dto that has the id and the updated entity version populated after being updated in the DB
      */
     @Transactional
-    public CustomerDTO updateCustomerEmail(@NonNull @Valid CustomerDTO customer, @NonNull String email) {
+    public CustomerDTO updateCustomerEmail(@NonNull @Valid CustomerDTO customer, @NonNull @Valid @Email String email) {
         log.info("Updating customer email for customer id:{}", customer.getId());
         Customer updatedCustomer = customerMapper.dtoToEntity(customer);
         updatedCustomer.setEmail(email);

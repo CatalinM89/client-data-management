@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.exceptions.CustomerAlreadyRegistered;
 import com.example.demo.mappers.CustomerMapper;
 import com.example.demo.models.CustomerRequest;
 import com.example.demo.models.CustomerResponse;
 import com.example.demo.service.CustomerService;
-import com.example.demo.validations.EmailOrAddressValidator;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +27,10 @@ public class CustomerController {
 
     private final CustomerMapper customerMapper;
 
-    private final EmailOrAddressValidator emailOrAddressValidator;
-
-
     @PostMapping("/customer")
     ResponseEntity<CustomerResponse> createCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
-        if (!emailOrAddressValidator.isValid(customerRequest)) {
-            throw new IllegalArgumentException("Missing or invalid required fields.");
-        }
         if (customerService.isCustomerRegistered(customerRequest.getFirstName(), customerRequest.getLastName())) {
-            throw new IllegalArgumentException("Customer already registered.");
+            throw new CustomerAlreadyRegistered("Customer already registered.");
         }
 
         CustomerResponse customerResponse = customerMapper.dtoToResponse(customerService.saveCustomer(customerMapper.requestToDTO(customerRequest)));

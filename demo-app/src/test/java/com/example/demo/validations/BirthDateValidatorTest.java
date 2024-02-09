@@ -7,9 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -23,24 +24,30 @@ class BirthDateValidatorTest {
 
     private final String dateTimeFormat = "dd-MM-yyyy";
 
-    private final LocalDate EXPECTED_DATE = LocalDate.of(2023,2,9);
+    private final LocalDate EXPECTED_DATE = LocalDate.of(2023, 2, 9);
     private BirthDateValidator birthDateValidator;
 
     @BeforeEach
     public void setup() {
-        when(clock.now()).thenReturn(EXPECTED_DATE);
+
         birthDateValidator = new BirthDateValidator(clock, minimumCustomerAge, dateTimeFormat);
 
     }
 
     @Test
     public void isValidBirthdate() {
+        when(clock.now()).thenReturn(EXPECTED_DATE);
         assertTrue(birthDateValidator.isValid("09-12-1989", null));
     }
 
     @Test
-    public void isInValidBirthdate() {
-        assertFalse(birthDateValidator.isValid("32-12-1989", null));
+    public void isInvalidBirthdate() {
+        assertThrows(DateTimeException.class, () -> birthDateValidator.isValid("32-12-1989", null));
+    }
+
+    @Test
+    public void isInvalidBirthdateYear() {
+        assertThrows(DateTimeException.class, () -> birthDateValidator.isValid("31-12", null));
     }
 
 
